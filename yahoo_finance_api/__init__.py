@@ -2,6 +2,7 @@ name = "python_finance_api"
 
 
 import pandas as pd
+import numpy as np
 import time  as _time
 import requests
 
@@ -49,7 +50,7 @@ class YahooFinance:
     def _parsing_json(self, data):
         timestamps = data['chart']['result'][0]['timestamp']
         # Formatting date from epoch to local time
-        timestamps = [_time.strftime('%a, %d %b %Y %H:%M:%S', _time.localtime(x)) for x in timestamps]
+        timestamps = [_time.strftime('%a, %d %b %Y %H:%M:%S', _time.localtime(x+5.5*60*60)) for x in timestamps]
         volumes = data['chart']['result'][0]['indicators']['quote'][0]['volume']
         opens = data['chart']['result'][0]['indicators']['quote'][0]['open']
         opens = self._round_of_list(opens)
@@ -70,7 +71,7 @@ class YahooFinance:
             if isinstance(x, float):
                 temp_list.append(round(x, 2))
             else:
-                temp_list.append(pd.np.nan)
+                temp_list.append(np.nan)
         return temp_list
 
     def to_csv(self, file_name):
